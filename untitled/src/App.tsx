@@ -10,7 +10,7 @@ function App() {
 
   useEffect(() => {
     mapboxgl.accessToken = apiKey;
-    // Only create the map if the container element is available
+
     if (!mapContainerRef.current) return
 
     mapRef.current = new mapboxgl.Map({
