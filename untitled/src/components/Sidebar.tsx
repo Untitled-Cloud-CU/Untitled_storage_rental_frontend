@@ -42,7 +42,7 @@ const Sidebar = ({ stores, selectedStore, setSelectedStore }: SidebarProps) => {
             key={store.properties.name} 
             ref={(el) => {storeRefs.current[store.properties.name] = el}}
             onClick={()=> setSelectedStore(store)}
-            className={`${isSelected ? 'bg-sg-beige' : 'bg-transparent'} hover:bg-sg-beige relative flex flex-col p-4 border-b border-sg-outline-grey transition-all duration-200 cursor-pointer `}
+            className={`${isSelected ? 'bg-hover-light-orange' : 'bg-transparent'} hover:bg-hover-light-orange relative flex flex-col p-4 border-b border-sg-outline-grey transition-all duration-200 cursor-pointer `}
 					>    
             <h4 className="mb-2 text-sg-orange text-base font-bold">{store.properties.name}</h4>
             <div className="text-sg-black leading-normal font-light">
@@ -59,7 +59,7 @@ const Sidebar = ({ stores, selectedStore, setSelectedStore }: SidebarProps) => {
 								<span className="font-bold text-sm">Price Per Day: </span>${store.properties.pricePerDay}
 							</div>
 							<div className='flex justify-center pt-2'>
-								<Button variant="contained" sx={{width: '100%', borderRadius: '5rem', backgroundColor: '#ff7528', color: '#fcf8f9'}} disableElevation>Check Availability</Button>
+								<Button variant="contained" sx={{width: '100%', borderRadius: '5rem', backgroundColor: '#ff7528', color: '#fcf8f9', ":hover": { backgroundColor: '#fc6612' }}} disableElevation>Check Availability</Button>
 							</div>
             </div>
           </div>

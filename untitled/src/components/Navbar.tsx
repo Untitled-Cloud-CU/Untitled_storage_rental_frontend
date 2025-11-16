@@ -14,8 +14,8 @@ const Navbar = () => {
             Untitled
           </Typography>
 					<Box sx={{ display: 'flex', gap: 1 }}>
-						<Button variant="contained" sx={{backgroundColor: '#fcf8f9', color: '#ff7528'}} disableElevation>Sign In</Button>
-						<Button variant="contained" sx={{backgroundColor: '#ff7528'}} disableElevation>Sign Up</Button>
+						<Button variant="contained" sx={{backgroundColor: '#fcf8f9', color: '#ff7528', ":hover": { backgroundColor: '#fcf2eb' }}} disableElevation>Sign In</Button>
+						<Button variant="contained" sx={{backgroundColor: '#ff7528', ":hover": { backgroundColor: '#fc6612' }}} disableElevation>Sign Up</Button>
 					</Box>
         </Toolbar>
       </AppBar>
