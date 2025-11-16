@@ -71,26 +71,29 @@ function App() {
   },[selectedStore])
   
   return (
-    <div className="flex h-full w-full">
-      {/* Sidebar */}
-      <Sidebar 
-        stores={stores}
-        selectedStore={selectedStore}
-        setSelectedStore={setSelectedStore}
-      />
+    <div className='flex flex-col h-full w-full'>
+      <Toolbar />
+      <div className="flex h-full w-full">
+        {/* Sidebar */}
+        <Sidebar 
+          stores={stores}
+          selectedStore={selectedStore}
+          setSelectedStore={setSelectedStore}
+        />
 
-      {/* Map container */}
-      <div className="w-3/4">
-        <div id='map-container' className="h-full w-full" ref={mapContainerRef} />
-        {mapLoaded && stores.map(location => (
-          <Marker 
-            key={location.properties.name}
-            feature={location} 
-            map={mapRef.current!}
-            setSelectedStore={setSelectedStore}
-            selectedStore={selectedStore}
-          />
-        ))}
+        {/* Map container */}
+        <div className="w-3/4">
+          <div id='map-container' className="h-full w-full" ref={mapContainerRef} />
+          {mapLoaded && stores.map(location => (
+            <Marker 
+              key={location.properties.name}
+              feature={location} 
+              map={mapRef.current!}
+              setSelectedStore={setSelectedStore}
+              selectedStore={selectedStore}
+            />
+          ))}
+        </div>
       </div>
     </div>
   )

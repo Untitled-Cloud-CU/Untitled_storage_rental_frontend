@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react"
 import { createPortal } from "react-dom";
-import mapboxgl from 'mapbox-gl'
+import mapboxgl from 'mapbox-gl';
+import PlaceIcon from '@mui/icons-material/Place';
 import type { StoreFeature } from '../assets/locations';
 
 interface MarkerProps {
@@ -30,13 +31,14 @@ const Marker = ({ map, feature, selectedStore, setSelectedStore }: MarkerProps) 
 	return (
 		<>
 			{createPortal(
-				<div 
+				<PlaceIcon
 					onClick={() => setSelectedStore(feature)}
-					className={'bg-contain bg-no-repeat cursor-pointer transition w-[37px] h-[40px]'}
-					style={{
-						backgroundImage: ( isSelected ? 'url("./sg-marker-selected.svg")' : 'url("./sg-marker.svg")'),
-					}}>
-				</div>,
+					className={`
+						cursor-pointer transition
+						${isSelected ? "text-sg-dark-blue" : "text-sg-orange"}
+					`}
+					style={{ fontSize: 40 }}
+				/>,
 				contentRef.current
 			)}
 		</>

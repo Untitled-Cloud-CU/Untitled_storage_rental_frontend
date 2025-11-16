@@ -1,5 +1,6 @@
-import { useEffect, useRef } from 'react'
-import type { StoreFeature } from '../assets/locations'
+import { useEffect, useRef } from 'react';
+import Button from '@mui/material/Button';
+import type { StoreFeature } from '../assets/locations';
 
 interface SidebarProps {
   stores: StoreFeature[]
@@ -29,9 +30,9 @@ const Sidebar = ({ stores, selectedStore, setSelectedStore }: SidebarProps) => {
 	}, [selectedStore])
 
   return (
-    <div className="w-1/4 p-4 overflow-y-auto bg-sg-light-green shadow-xl z-10">
-      <h2 className="text-sg-green text-xl font-bold mb-4">
-        Stores nearby: {stores.length}
+    <div className="w-1/4 overflow-y-auto bg-sg-white shadow-xl z-10">
+      <h2 className="text-sg-dark-blue text-xl font-medium p-4 ">
+        Storage Units Nearby: {stores.length}
       </h2>
       
       {stores.map((store) => {
@@ -41,17 +42,25 @@ const Sidebar = ({ stores, selectedStore, setSelectedStore }: SidebarProps) => {
             key={store.properties.name} 
             ref={(el) => {storeRefs.current[store.properties.name] = el}}
             onClick={()=> setSelectedStore(store)}
-            className={`${isSelected ? 'bg-white' : 'bg-transparent'} hover:bg-white/50 relative flex flex-col my-4 border border-sg-green rounded-lg transition-all duration-200 cursor-pointer p-4`}
-					>
-               
-            <h4 className="mb-2 text-sg-green text-xl font-semibold">{store.properties.name}</h4>
-            <div className="text-sg-green leading-normal font-light">
-                <div>
-                    <span className="font-bold text-sm">Address: </span>{store.properties.address}
-                </div>    
-                <div>
-                    <span className="font-bold text-sm">Phone: </span>{store.properties.phoneFormatted}
-                </div>
+            className={`${isSelected ? 'bg-sg-beige' : 'bg-transparent'} hover:bg-sg-beige relative flex flex-col p-4 border-b border-sg-outline-grey transition-all duration-200 cursor-pointer `}
+					>    
+            <h4 className="mb-2 text-sg-orange text-base font-bold">{store.properties.name}</h4>
+            <div className="text-sg-black leading-normal font-light">
+							<div>
+								<span className="font-bold text-sm">Address: </span>{store.properties.address}
+							</div>    
+							<div>
+								<span className="font-bold text-sm">Phone: </span>{store.properties.phoneFormatted}
+							</div>
+							<div>
+								<span className="font-bold text-sm">Size: </span>{store.properties.size} ft.
+							</div>
+							<div>
+								<span className="font-bold text-sm">Price Per Day: </span>${store.properties.pricePerDay}
+							</div>
+							<div className='flex justify-center pt-2'>
+								<Button variant="contained" sx={{width: '100%', borderRadius: '5rem', backgroundColor: '#ff7528', color: '#fcf8f9'}} disableElevation>Check Availability</Button>
+							</div>
             </div>
           </div>
         )

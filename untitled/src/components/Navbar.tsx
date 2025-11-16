@@ -4,20 +4,18 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
 
 const Navbar = () => {
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar sx={{backgroundColor: '#fba777'}}>
         <Toolbar>
-          <Typography variant="h4" component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant="h4" component="div" sx={{ flexGrow: 1, color: '#fcf8f9' }}>
             Untitled
           </Typography>
-					<Box sx={{ display: 'flex', gap: 2 }}>
-						<Button color="secondary" variant="outlined">Sign In</Button>
-						<Button color="secondary" variant="contained">Sign Up</Button>
+					<Box sx={{ display: 'flex', gap: 1 }}>
+						<Button variant="contained" sx={{backgroundColor: '#fcf8f9', color: '#ff7528'}} disableElevation>Sign In</Button>
+						<Button variant="contained" sx={{backgroundColor: '#ff7528'}} disableElevation>Sign Up</Button>
 					</Box>
         </Toolbar>
       </AppBar>
