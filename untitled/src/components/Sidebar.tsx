@@ -59,7 +59,7 @@ const Sidebar = ({ stores, selectedStore, setSelectedStore }: SidebarProps) => {
 								<span className="font-bold text-sm">Price Per Day: </span>${store.properties.pricePerDay}
 							</div>
 							<div className='flex justify-center pt-2'>
-								<Button variant="contained" sx={{width: '100%', borderRadius: '5rem', backgroundColor: '#ff7528', color: '#fcf8f9', ":hover": { backgroundColor: '#fc6612' }}} disableElevation>Check Availability</Button>
+								<Button variant="contained" sx={{width: '100%', borderRadius: '5rem', backgroundColor: '#ff7528', color: '#fcf8f9', ":hover": { backgroundColor: '#fc6612' }, textTransform: 'none', fontWeight: 600}} disableElevation>Check Availability</Button>
 							</div>
             </div>
           </div>

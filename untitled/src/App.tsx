@@ -71,9 +71,9 @@ function App() {
   },[selectedStore])
   
   return (
-    <div className='flex flex-col h-full w-full'>
+    <div className='flex flex-col h-screen w-screen'>
       <Toolbar />
-      <div className="flex h-full w-full">
+      <div className="flex flex-1 h-0">
         {/* Sidebar */}
         <Sidebar 
           stores={stores}
@@ -82,7 +82,7 @@ function App() {
         />
 
         {/* Map container */}
-        <div className="w-3/4">
+        <div className="w-3/4 h-full">
           <div id='map-container' className="h-full w-full" ref={mapContainerRef} />
           {mapLoaded && stores.map(location => (
             <Marker 
