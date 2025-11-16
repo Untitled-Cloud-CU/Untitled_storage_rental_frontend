@@ -9,8 +9,6 @@
 #map-container {
   height: 100%;
   width: 100%;
-  /* temporarily set the background color so we can tell where the map container is positioned */
-  background-color: lightgrey;
 }
 
 .sidebar {
@@ -35,3 +33,9 @@
   border-radius: 10px;
   cursor: pointer;
 }
+
+.mapboxgl-ctrl-geocoder input:focus {
+  outline: none;
+  box-shadow: none;
+}
+

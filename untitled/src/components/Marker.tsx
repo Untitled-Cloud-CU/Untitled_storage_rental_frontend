@@ -1,48 +1,36 @@
-import { useEffect, useRef } from "react"
-import { createPortal } from "react-dom";
+import { useEffect, useRef } from "react";
 import mapboxgl from 'mapbox-gl';
-import PlaceIcon from '@mui/icons-material/Place';
 import type { StoreFeature } from '../assets/locations';
 
 interface MarkerProps {
-  feature: StoreFeature
-  map: mapboxgl.Map
-	selectedStore: StoreFeature | null
-  setSelectedStore: Function
+  feature: StoreFeature;
+  map: mapboxgl.Map;
+  selectedStore: StoreFeature | null;
+  setSelectedStore: Function;
 }
 
 const Marker = ({ map, feature, selectedStore, setSelectedStore }: MarkerProps) => {
-	const { geometry } = feature
+  const markerRef = useRef<mapboxgl.Marker | null>(null);
+  const isSelected = feature.properties.name === selectedStore?.properties.name;
 
-	const contentRef = useRef(document.createElement("div"));
-	const markerRef = useRef<mapboxgl.Marker | null>(null);
-	const isSelected = feature.properties.name === selectedStore?.properties.name;
-	
-	useEffect(() => {
-		markerRef.current = new mapboxgl.Marker(contentRef.current)
-			.setLngLat([geometry.coordinates[0], geometry.coordinates[1]])
-			.addTo(map)
+  useEffect(() => {
+    // Create a Mapbox marker
+    markerRef.current = new mapboxgl.Marker({
+      color: isSelected ? "#1e3a8a" : "#ff7528", // blue if selected, orange otherwise
+    })
+      .setLngLat([feature.geometry.coordinates[0], feature.geometry.coordinates[1]])
+      .addTo(map);
 
-		return () => {
-			markerRef.current?.remove()
-		}
-	}, [])
+    markerRef.current.getElement().addEventListener("click", () => {
+      setSelectedStore(feature);
+    });
 
-	return (
-		<>
-			{createPortal(
-				<PlaceIcon
-					onClick={() => setSelectedStore(feature)}
-					className={`
-						cursor-pointer transition
-						${isSelected ? "text-sg-dark-blue" : "text-sg-orange"}
-					`}
-					style={{ fontSize: 40 }}
-				/>,
-				contentRef.current
-			)}
-		</>
-	)
-}
+    return () => {
+      markerRef.current?.remove();
+    };
+  }, [map, feature, isSelected]);
 
-export default Marker
+  return null; // no portal needed
+};
+
+export default Marker;

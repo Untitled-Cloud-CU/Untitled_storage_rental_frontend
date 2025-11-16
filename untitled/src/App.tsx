@@ -30,26 +30,6 @@ function App() {
       zoom: 12
     })
 
-    // locate user
-    mapRef.current.addControl(
-      new mapboxgl.GeolocateControl({
-        positionOptions: {
-          enableHighAccuracy: true
-        },
-        trackUserLocation: true,
-        showUserHeading: true,
-      })
-    );
-
-    // add search box
-    mapRef.current.addControl(
-      new MapboxGeocoder({
-        accessToken: mapboxgl.accessToken as string,
-        useBrowserFocus: true,
-        mapboxgl: mapboxgl as any
-      })
-    );
-
     mapRef.current.on('load', () => {
       setMapLoaded(true)
     })
@@ -61,6 +41,92 @@ function App() {
       }
     }
   }, [])
+
+  // for locate button
+  useEffect(() => {
+    if (!mapRef.current) return;
+
+    const geolocate = new mapboxgl.GeolocateControl({
+      positionOptions: { enableHighAccuracy: true },
+      trackUserLocation: true,
+      showUserHeading: true,
+    });
+
+    const buttonEl = geolocate.onAdd(mapRef.current); // returns <div class="mapboxgl-ctrl ...">
+    const targetContainer = document.getElementById('mapbox-locate-container');
+    if (buttonEl && targetContainer) {
+      targetContainer.appendChild(buttonEl);
+
+      // Make button height match the search box
+      buttonEl.style.height = '35px';
+      buttonEl.style.minWidth = '35px'; 
+      buttonEl.style.display = 'flex';
+      buttonEl.style.alignItems = 'center';
+      buttonEl.style.justifyContent = 'center';
+    }
+
+    // Cleanup
+    return () => {
+      if (targetContainer && buttonEl.parentNode === targetContainer) {
+        targetContainer.removeChild(buttonEl);
+      }
+    };
+  }, [mapRef.current]);
+
+  // for search box
+  const geocoderRef = useRef<MapboxGeocoder | null>(null);
+  const searchMarker = useRef<mapboxgl.Marker | null>(null);
+
+  useEffect(() => {
+    if (!mapRef.current || geocoderRef.current) return;
+
+    const geocoder = new MapboxGeocoder({
+      accessToken: mapboxgl.accessToken as string,
+      mapboxgl: mapboxgl as any,
+      placeholder: "Search stores...",
+      proximity: { longitude: -73.9822, latitude: 40.7685 },
+      marker: false,
+    });
+
+    geocoderRef.current = geocoder;
+
+    const searchContainer = document.getElementById("mapbox-search-container");
+    if (searchContainer && mapRef.current) {
+      const geocoderEl = geocoder.onAdd(mapRef.current);
+      searchContainer.appendChild(geocoderEl);
+
+      // Make container fill the parent container
+      geocoderEl.style.width = "100%";
+      geocoderEl.style.maxWidth = "35rem";
+      geocoderEl.style.flexGrow = "1";
+
+      // Make input fill container
+      const inputEl = geocoderEl.querySelector("input") as HTMLInputElement;
+      if (inputEl) {
+        inputEl.style.width = "100%";
+        inputEl.style.boxSizing = "border-box";
+      }
+    }
+
+    // Listen for search results
+    geocoder.on("result", (event) => {
+      const coords = event.result.center;
+      if (!coords || coords.length !== 2 || !mapRef.current) return;
+
+      // Fly to location
+      mapRef.current.flyTo({ center: coords as [number, number], zoom: 13, duration: 1000 });
+
+      // Remove old search marker
+      if (searchMarker.current) searchMarker.current.remove();
+
+      // Add a new marker at the search result
+      searchMarker.current = new mapboxgl.Marker({ color: "#ff3b4e" })
+        .setLngLat(coords as [number, number])
+        .addTo(mapRef.current);
+    });
+  }, [mapRef.current]);
+
+
 
   // fly to selected place
   useEffect(() => {
@@ -74,14 +140,11 @@ function App() {
     <div className='flex flex-col h-screen w-screen'>
       <Toolbar />
       <div className="flex flex-1 h-0">
-        {/* Sidebar */}
         <Sidebar 
           stores={stores}
           selectedStore={selectedStore}
           setSelectedStore={setSelectedStore}
         />
-
-        {/* Map container */}
         <div className="w-3/4 h-full">
           <div id='map-container' className="h-full w-full" ref={mapContainerRef} />
           {mapLoaded && stores.map(location => (
