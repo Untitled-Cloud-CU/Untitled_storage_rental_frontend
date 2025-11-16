@@ -83,7 +83,7 @@ function App() {
     const geocoder = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken as string,
       mapboxgl: mapboxgl as any,
-      placeholder: "Search stores...",
+      placeholder: "Search for places...",
       proximity: { longitude: -73.9822, latitude: 40.7685 },
       marker: false,
     });
