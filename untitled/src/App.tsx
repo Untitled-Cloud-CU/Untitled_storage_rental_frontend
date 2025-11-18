@@ -14,10 +14,24 @@ function App() {
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const apiKey = import.meta.env.VITE_API_KEY;
-  const [stores] = useState<StoreFeature[]>(storeLocations);
+  const [stores, setStores] = useState<StoreFeature[]>([]);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [selectedStore, setSelectedStore] = useState<StoreFeature | null>(null)
 
+  // fetch data from microservices:
+  // 1. Locations:
+  function fetchLocations (){
+    fetch("http://localhost:8000/addresses?as_geojson=true")
+    .then(response => response.json())
+    .then(data => {
+      // process data
+      console.log("Fetched locations:", data);
+      setStores(data.features);
+    })
+    .catch(error => {
+      console.error("Error fetching locations:", error);
+    });
+  }
 
   useEffect(() => {
     mapboxgl.accessToken = apiKey;
@@ -32,6 +46,7 @@ function App() {
 
     mapRef.current.on('load', () => {
       setMapLoaded(true)
+      fetchLocations();
     })
 
     return () => {
