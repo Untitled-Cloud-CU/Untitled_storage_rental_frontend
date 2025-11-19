@@ -18,20 +18,32 @@ function App() {
   const [mapLoaded, setMapLoaded] = useState(false);
   const [selectedStore, setSelectedStore] = useState<StoreFeature | null>(null)
 
-  // fetch data from microservices:
-  // 1. Locations:
-  function fetchLocations (){
-    fetch("http://localhost:8000/addresses?as_geojson=true")
-    .then(response => response.json())
-    .then(data => {
-      // process data
-      console.log("Fetched locations:", data);
-      setStores(data.features);
-    })
-    .catch(error => {
-      console.error("Error fetching locations:", error);
-    });
-  }
+  const [links, setLinks] = useState<{ next?: string; prev?: string }>({});
+  
+  const API_BASE = 'http://localhost:8000'; // or your deployed backend
+
+  const fetchPage = async (url: string = `${API_BASE}/addresses?as_geojson=true&limit=5`) => {
+	try {
+    // Ensure as_geojson=true is in the URL
+    if (!url.includes("as_geojson=true")) {
+      url += url.includes("?") ? "&as_geojson=true" : "?as_geojson=true";
+    }
+		const res = await fetch(url);
+    console.log("Fetching URL:", url);
+		const data = await res.json();
+		console.log('Fetched page data:', data);
+		setStores(data.features || []);
+		const nextLink = data.links?.find((l: any) => l.rel === 'next')?.href;
+		const prevLink = data.links?.find((l: any) => l.rel === 'prev')?.href;
+		// prepend base if needed
+		setLinks({
+			next: nextLink ? `${API_BASE}${nextLink}` : undefined,
+			prev: prevLink ? `${API_BASE}${prevLink}` : undefined,
+		});
+	} catch (err) {
+		console.error('Failed to fetch page:', err);
+	}
+	};
 
   useEffect(() => {
     mapboxgl.accessToken = apiKey;
@@ -46,7 +58,8 @@ function App() {
 
     mapRef.current.on('load', () => {
       setMapLoaded(true)
-      fetchLocations();
+      // fetchLocations();
+      fetchPage();
     })
 
     return () => {
@@ -157,6 +170,8 @@ function App() {
       <div className="flex flex-1 h-0">
         <Sidebar 
           stores={stores}
+          links={links}
+          fetchPage={fetchPage}
           selectedStore={selectedStore}
           setSelectedStore={setSelectedStore}
         />
