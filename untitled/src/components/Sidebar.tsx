@@ -5,12 +5,13 @@ import type { StoreFeature } from '../assets/locations';
 interface SidebarProps {
 	stores: StoreFeature[];
 	links: { next?: string; prev?: string };
+	total: number;
 	fetchPage: Function;
 	selectedStore: StoreFeature | null;
 	setSelectedStore: Function;
 }
 
-const Sidebar = ({ stores, links, fetchPage, selectedStore, setSelectedStore }: SidebarProps) => {
+const Sidebar = ({ stores, links, total, fetchPage, selectedStore, setSelectedStore }: SidebarProps) => {
 	const storeRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
 	// Scroll to active location
@@ -37,7 +38,7 @@ const Sidebar = ({ stores, links, fetchPage, selectedStore, setSelectedStore }: 
 	return (
 	<div className="w-1/4 overflow-y-auto bg-sg-white shadow-xl z-10">
 		<h2 className="text-sg-dark-blue text-xl font-medium p-4">
-		Storage Units Nearby: {stores.length}
+		Storage Units Nearby: {total}
 		</h2>
 
 		{stores.map((store) => {

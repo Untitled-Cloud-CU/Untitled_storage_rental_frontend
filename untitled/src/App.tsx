@@ -3,7 +3,7 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
-import { storeLocations } from './assets/locations';
+// import { storeLocations } from './assets/locations';
 import type { StoreFeature } from './assets/locations';
 import Toolbar from '@mui/material/Toolbar';
 import Marker from './components/Marker';
@@ -16,7 +16,8 @@ function App() {
   const apiKey = import.meta.env.VITE_API_KEY;
   const [stores, setStores] = useState<StoreFeature[]>([]);
   const [mapLoaded, setMapLoaded] = useState(false);
-  const [selectedStore, setSelectedStore] = useState<StoreFeature | null>(null)
+  const [selectedStore, setSelectedStore] = useState<StoreFeature | null>(null);
+  const [total, setTotal] = useState<number>(0);
 
   const [links, setLinks] = useState<{ next?: string; prev?: string }>({});
   
@@ -30,9 +31,13 @@ function App() {
     }
 		const res = await fetch(url);
     console.log("Fetching URL:", url);
+
 		const data = await res.json();
 		console.log('Fetched page data:', data);
+
 		setStores(data.features || []);
+    setTotal(data.total || 0);
+
 		const nextLink = data.links?.find((l: any) => l.rel === 'next')?.href;
 		const prevLink = data.links?.find((l: any) => l.rel === 'prev')?.href;
 		// prepend base if needed
@@ -171,6 +176,7 @@ function App() {
         <Sidebar 
           stores={stores}
           links={links}
+          total={total} 
           fetchPage={fetchPage}
           selectedStore={selectedStore}
           setSelectedStore={setSelectedStore}
