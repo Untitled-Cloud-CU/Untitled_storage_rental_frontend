@@ -3,17 +3,23 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import { useNavigate } from "react-router-dom";
+import Link from '@mui/material/Link';
 
 const Navbar = () => {
+  const navigate = useNavigate();
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar sx={{ backgroundColor: '#fba777' }} elevation={0}>
         <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           
           {/* Title */}
-          <Typography variant="h4" component="div" sx={{ color: '#fcf8f9' }}>
-            Untitled
-          </Typography>
+          <Link href="/" underline="none">
+            <Typography variant="h4" component="div" sx={{ color: '#fcf8f9', "&:hover": {textDecoration: "underline", textDecorationColor: "#fcf8f9",}, }}>
+              Untitled
+            </Typography>
+          </Link>
 
           {/* Search + Locate button */}
           <Box
@@ -56,6 +62,7 @@ const Navbar = () => {
                 textTransform: 'none',
                 fontWeight: 600
               }}
+              onClick={() => navigate("/signin")}
               disableElevation
             >
               Sign In
@@ -68,6 +75,7 @@ const Navbar = () => {
                 textTransform: 'none',
                 fontWeight: 600
               }}
+              onClick={() => navigate("/signup")}
               disableElevation
             >
               Sign Up
