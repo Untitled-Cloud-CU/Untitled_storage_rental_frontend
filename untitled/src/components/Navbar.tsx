@@ -3,11 +3,14 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { useNavigate } from "react-router-dom";
 import Link from '@mui/material/Link';
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const isHome = location.pathname === "/";
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -16,40 +19,50 @@ const Navbar = () => {
           
           {/* Title */}
           <Link href="/" underline="none">
-            <Typography variant="h4" component="div" sx={{ color: '#fcf8f9', "&:hover": {textDecoration: "underline", textDecorationColor: "#fcf8f9",}, }}>
+            <Typography
+              variant="h4"
+              component="div"
+              sx={{
+                color: '#fcf8f9',
+                "&:hover": {
+                  textDecoration: "underline",
+                  textDecorationColor: "#fcf8f9",
+                },
+              }}
+            >
               Untitled
             </Typography>
           </Link>
 
-          {/* Search + Locate button */}
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 1,
-              flexGrow: 1,
-              justifyContent: 'center'
-            }}
-          >
-            {/* Mapbox search box container */}
+          {/* Search + Locate button (only on home page) */}
+          {isHome && (
             <Box
-              id="mapbox-search-container"
               sx={{
                 display: 'flex',
                 alignItems: 'center',
-                width: '35rem',
+                gap: 1,
+                flexGrow: 1,
+                justifyContent: 'center'
               }}
-            />
+            >
+              <Box
+                id="mapbox-search-container"
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  width: '35rem',
+                }}
+              />
 
-            {/* Mapbox locate button container */}
-            <Box
-              id="mapbox-locate-container"
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            />
-          </Box>
+              <Box
+                id="mapbox-locate-container"
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              />
+            </Box>
+          )}
 
           {/* Sign in + Sign up Buttons */}
           <Box sx={{ display: 'flex', gap: 1 }}>
