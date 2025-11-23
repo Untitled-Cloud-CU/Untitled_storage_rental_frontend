@@ -10,6 +10,6 @@ npm install
 ## Start Project
 
 ```bash
-npm run dev
+npm run  dev
 ```
 
