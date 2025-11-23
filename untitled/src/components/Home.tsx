@@ -21,7 +21,9 @@ const Home = () => {
 
   const [links, setLinks] = useState<{ next?: string; prev?: string }>({});
   
-  const API_BASE = 'http://localhost:8000'; // or your deployed backend
+  // const API_BASE = 'http://localhost:8000'; // or your deployed backend
+  const API_BASE = 'https://34.68.97.0';
+
 
   const fetchPage = async (url: string = `${API_BASE}/addresses?as_geojson=true&limit=5`) => {
 	try {
@@ -29,8 +31,11 @@ const Home = () => {
     if (!url.includes("as_geojson=true")) {
       url += url.includes("?") ? "&as_geojson=true" : "?as_geojson=true";
     }
+    // replace localhost with API_BASE
+    url = url.replace("http://localhost:8000", API_BASE);
+
+    console.log("Fetching URL:", url, API_BASE);
 		const res = await fetch(url);
-    console.log("Fetching URL:", url);
 
 		const data = await res.json();
 		console.log('Fetched page data:', data);
